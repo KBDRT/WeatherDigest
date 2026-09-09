@@ -1,9 +1,7 @@
 import config from './config/starting-parameters.js';
+import { parseParameters } from './utils/parameters-parser.js';
 
-// validateEnvFile();
+console.log(parseParameters());
 
 console.log("START");
 
-// const args = process.argv.slice(2);
-
-console.log(config);

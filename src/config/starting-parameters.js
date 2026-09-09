@@ -1,5 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({quiet: true});
+
+import { validateEnvFile } from './validator.js';
+
+validateEnvFile();
 
 const config = {
   city: {

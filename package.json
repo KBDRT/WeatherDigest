@@ -11,7 +11,9 @@
     "url": "git+https://github.com/KBDRT/WeatherDigest.git"
   },
   "packages": {},
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  },
   "author": "Artemiy",
   "license": "ISC",
   "type": "module",

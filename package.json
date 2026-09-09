@@ -1,0 +1,22 @@
+{
+  "name": "WeatherDigest",
+  "version": "1.0.0",
+  "description": "Утилита «Погодный дайджест» для получения прогноза погоды по городам",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KBDRT/WeatherDigest.git"
+  },
+  "packages": {},
+  "dependencies": {},
+  "author": "Artemiy",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/KBDRT/WeatherDigest/issues"
+  },
+  "homepage": "https://github.com/KBDRT/WeatherDigest#readme"
+}

@@ -14,6 +14,11 @@ const config = {
     defaultValue: parseInt(process.env.PARAMETER_DAYS_DEFAULT_VALUE),
     minValue: parseInt(process.env.PARAMETER_DAYS_MIN_VALUE),
     maxValue: parseInt(process.env.PARAMETER_DAYS_MAX_VALUE)
+  },
+  api : {
+    baseUrlGeocoding: process.env.BASE_URL_GEOCODING,
+    baseUrlWeather: process.env.BASE_URL_WEATHER,
+    timeOut: Number(process.env.API_TIMEOUT)
   }
 };
 

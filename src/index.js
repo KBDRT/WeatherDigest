@@ -1,7 +1,6 @@
-import config from './config/starting-parameters.js';
-import { parseParameters } from './utils/parameters-parser.js';
-
-console.log(parseParameters());
+import { Execute } from "./services/weather-service";
 
 console.log("START");
+
+await Execute();
 

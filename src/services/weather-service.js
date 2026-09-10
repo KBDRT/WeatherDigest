@@ -1,5 +1,6 @@
 import { getGeocodingAsync, getWeatherAsync } from '../api/open-meteo-client.js';
 import { parseParameters } from '../utils/parameters-parser.js';
+import { saveReport } from '../storage/reports-saver.js';
 
 export async function execute() {
   const inputParameters = parseParameters();
@@ -29,5 +30,6 @@ async function getWeatherForCity(city, days) {
   }
 
   console.log(info);
+  await saveReport(info, days);
   return info;
 }

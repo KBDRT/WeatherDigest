@@ -11,17 +11,17 @@ export async function execute() {
 
   let tasks = [];
   for (let city of inputParameters.cities) {
-    tasks.push(getWeatherForCity(city, inputParameters.days))
+    tasks.push(getWeatherForCity(city, inputParameters.days, !inputParameters.nocache))
   }
 
   await Promise.allSettled(tasks);
 }
 
-async function getWeatherForCity(city, days) {
+async function getWeatherForCity(city, days, useCache) {
   const cityInfo = new CityWeather();
   cityInfo.city = city;
 
-  if (await getInfoFromReport(city, days)) {
+  if (useCache && await getInfoFromReport(city, days)) {
     return;
   }
 

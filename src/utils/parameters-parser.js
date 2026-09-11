@@ -1,12 +1,12 @@
 import config from '../config/starting-parameters.js';
 
-const PARAMETER_PREFIX = "--"
 const CITIES_SEPARATOR = ","
 
 export function parseParameters() {
   let parameters = {
     days: config.days.defaultValue,
-    cities: []
+    cities: [],
+    nocache: false,
   }
 
   const args = process.argv.slice(2);
@@ -16,16 +16,22 @@ export function parseParameters() {
     const parsingDaysResult = parseDays(parameter, args[index + 1]);
     if (parsingDaysResult.success) {
       parameters.days = parsingDaysResult.value;
+      continue;
     }
 
     const parsingCitiesResult = parseCities(parameter, args[index + 1]);
     if (parsingCitiesResult.success) {
       parameters.cities = parsingCitiesResult.value;
+      continue;
+    }
+
+    if (!parameters.nocache) {
+      parameters.nocache = parseNoCache(parameter);
     }
   }
 
   if (parameters.cities.length == 0) { 
-    const parameterName = `${PARAMETER_PREFIX}${config.city["parameterName"]}`
+    const parameterName = `${config.city["parameterName"]}`
     console.error(`Ошибка! Для параметра ${parameterName} не указано значение!`);
     process.exit(1);
   } 
@@ -38,7 +44,7 @@ function parseDays(currentParameter, nextParameter) {
     success: false,
     value: -1
   }
-  const parameterName = `${PARAMETER_PREFIX}${config.days["parameterName"]}`
+  const parameterName = `${config.days["parameterName"]}`
   if (currentParameter === parameterName) {
     if (nextParameter) {
       const convertedValue = parseInt(nextParameter, 10);
@@ -64,7 +70,7 @@ function parseCities(currentParameter, nextParameter) {
     success: false,
     value: []
   }
-  const parameterName = `${PARAMETER_PREFIX}${config.city["parameterName"]}`
+  const parameterName = `${config.city["parameterName"]}`
   if (currentParameter === parameterName) {
     if (nextParameter) {
       if (nextParameter.indexOf(CITIES_SEPARATOR) != -1) {
@@ -78,3 +84,11 @@ function parseCities(currentParameter, nextParameter) {
   }
   return result;
 }
+
+function parseNoCache(currentParameter) {
+  const parameterName = `${config.noCache["parameterName"]}`
+  if (currentParameter === parameterName) {
+    return true;
+  }
+  return false;
+};

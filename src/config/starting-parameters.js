@@ -15,6 +15,9 @@ const config = {
     minValue: parseInt(process.env.PARAMETER_DAYS_MIN_VALUE),
     maxValue: parseInt(process.env.PARAMETER_DAYS_MAX_VALUE)
   },
+  noCache: {
+    parameterName: process.env.PARAMETER_NOCACHE_NAME
+  }
   api : {
     baseUrlGeocoding: process.env.BASE_URL_GEOCODING,
     baseUrlWeather: process.env.BASE_URL_WEATHER,

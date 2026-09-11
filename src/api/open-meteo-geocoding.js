@@ -1,4 +1,8 @@
 import config from '../config/starting-parameters.js';
+import { CityNoFoundError } from '../errors/CityNoFoundError.js';
+import { GetocodingJsonError } from '../errors/GeocodingJsonError.js';
+import { HttpError } from '../errors/httpError.js';
+import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getGeocodingAsync(city) {
   let cityInfo = {
@@ -22,9 +26,13 @@ export async function getGeocodingAsync(city) {
       const parsedData = await parseResult(response);
       cityInfo = { ...cityInfo, ...parsedData };
     }
+    else {
+      throw new HttpError(response.status, response.statusText);
+    }
   }
   catch (error) {
-    console.log("ПОКА ERROR CODING " + error);
+    const errorMessage = handleErrors("Ошибка API-GEOCODING!", error);
+    console.log(`${city}: ${errorMessage}`);
   }
 
   return cityInfo;
@@ -42,15 +50,21 @@ function getGeocodingURL(city) {
 
 async function parseResult(response) {
   const data = await response.json();
-  if (data.results?.length > 0) {
-    const city = data.results[0];
+  if (data.results.length < 0) {
+    throw new CityNoFoundError();
+  }
+  
+  const city = data.results[0];
+  if (city.country && city.latitude && city.longitude) {
     return {
-      country: city.country ?? '',
-      latitude: city.latitude ?? 0,
-      longitude: city.longitude ?? 0,
+      country: city.country,
+      latitude: city.latitude,
+      longitude: city.longitude,
       found: true
     };
   }
-  return {};
+  else {
+    throw new GetocodingJsonError();
+  }
 }
 

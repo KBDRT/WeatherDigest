@@ -2,6 +2,7 @@ import { getGeocodingAsync, getWeatherAsync } from '../api/open-meteo-client.js'
 import { CityWeather } from '../models/CityWeather.js';
 import { parseParameters } from '../utils/parameters-parser.js';
 import { DayWeather } from '../models/DayWeather.js';
+import { saveReport } from '../storage/reports-saver.js';
 
 export async function execute() {
   const inputParameters = parseParameters();

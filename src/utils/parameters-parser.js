@@ -74,7 +74,12 @@ function parseCities(currentParameter, nextParameter) {
   if (currentParameter === parameterName) {
     if (nextParameter) {
       if (nextParameter.indexOf(CITIES_SEPARATOR) != -1) {
-        result.value = nextParameter.split(CITIES_SEPARATOR);
+        for (let city of nextParameter.split(CITIES_SEPARATOR)) {
+          const cityName = city.trim();
+          if (cityName.length > 0) {
+            result.value.push(cityName);
+          }
+        }
       }
       else {
         result.value.push(nextParameter);

@@ -5,6 +5,7 @@ import { saveReport } from '../storage/reports-saver.js';
 import { getInfoFromReport } from '../storage/reports-reader.js';
 import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
 import { getWeatherAsync } from '../api/open-meteo-weather.js';
+import { Printer } from '../format/Printer.js';
 
 export async function execute() {
   const inputParameters = parseParameters();
@@ -33,7 +34,8 @@ async function getWeatherForCity(city, days, useCache) {
     fillCityWeather(cityInfo, cityWeather);
     await saveReport(cityInfo, days);
 
-    console.log(cityInfo);
+    const printer = new Printer(cityInfo);
+    printer.display();
   }
   else {
     // console.log(`Город ${city} не найден!`);

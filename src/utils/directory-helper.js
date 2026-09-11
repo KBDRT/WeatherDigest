@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import config from '../config/starting-parameters.js';
+import config from '../config/config-parameters.js';
 import { getCurrentDate } from './date-helper.js';
 
 export async function getFolder(city, days, isCreateFolder) {

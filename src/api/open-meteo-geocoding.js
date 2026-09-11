@@ -1,4 +1,4 @@
-import config from '../config/starting-parameters.js';
+import config from '../config/config-parameters.js';
 import { HttpError } from '../errors/httpError.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';

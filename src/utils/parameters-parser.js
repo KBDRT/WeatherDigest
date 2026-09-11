@@ -1,4 +1,4 @@
-import config from '../config/starting-parameters.js';
+import config from '../config/config-parameters.js';
 
 const CITIES_SEPARATOR = ","
 

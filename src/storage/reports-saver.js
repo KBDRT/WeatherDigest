@@ -2,13 +2,14 @@ import fs from 'fs/promises';
 import path from 'path';
 import config from '../config/starting-parameters.js';
 import { fileURLToPath } from 'url';
+import { getFolder } from '../utils/directory-helper.js';
 
 export async function saveReport(citiesWeather, days) {
 
   const serializedInfo = JSON.stringify(citiesWeather, null, 2);
-  const fullPath = await getFolder();
 
   try {
+    const fullPath = await getFolder(citiesWeather.city, days, true);
     await fs.writeFile(fullPath, serializedInfo);
   }
   catch (error) {
@@ -17,20 +18,3 @@ export async function saveReport(citiesWeather, days) {
 
 }
 
-async function getFolder() {
-
-  const currentPath = path.dirname(fileURLToPath(import.meta.url));
-  const basePath = path.join(currentPath, '..', "..");
-
-  const reportsPath = path.join(basePath, config.reportsFolder);
-  const newReportPath = path.join(reportsPath, "test.json");
-
-  try {
-    await fs.mkdir(reportsPath, { recursive: true });
-  }
-  catch (error) {
-
-  }
-
-  return newReportPath;
-}

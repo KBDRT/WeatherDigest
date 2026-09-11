@@ -3,6 +3,7 @@ import { CityWeather } from '../models/CityWeather.js';
 import { parseParameters } from '../utils/parameters-parser.js';
 import { DayWeather } from '../models/DayWeather.js';
 import { saveReport } from '../storage/reports-saver.js';
+import { getInfoFromReport } from '../storage/reports-reader.js';
 
 export async function execute() {
   const inputParameters = parseParameters();
@@ -17,14 +18,21 @@ export async function execute() {
 
 async function getWeatherForCity(city, days) {
   const cityInfo = new CityWeather();
-  cityInfo.city = city;;
+  cityInfo.city = city;
+
+  if (await getInfoFromReport(city, days)) {
+    return;
+  }
+
   const cityGeocoding = await getGeocodingAsync(city);
 
   if (cityGeocoding.founded) {
     fillCityInfo(cityInfo, cityGeocoding);
     const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, days);
     fillCityWeather(cityInfo, cityWeather);
-    console.log(JSON.stringify(cityInfo, null, 2));
+    await saveReport(cityInfo, days);
+
+    console.log(cityInfo);
   }
   else {
     // console.log(`Город ${city} не найден!`);

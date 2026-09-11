@@ -32,7 +32,7 @@ async function getWeatherForCity(city, days) {
     fillCityInfo(cityInfo, cityGeocoding);
     const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, days);
     fillCityWeather(cityInfo, cityWeather);
-    console.log(JSON.stringify(cityInfo, null, 2));
+    await saveReport(cityInfo, days);
   }
   else {
     // console.log(`Город ${city} не найден!`);

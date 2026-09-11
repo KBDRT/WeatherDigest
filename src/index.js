@@ -10,5 +10,3 @@ for (let city of inputParameters.cities) {
 }
 
 await Promise.allSettled(tasks);
-
-process.exit(0);

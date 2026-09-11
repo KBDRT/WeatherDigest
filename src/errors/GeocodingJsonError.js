@@ -1,6 +1,6 @@
 export class GetocodingJsonError extends Error {
-  constructor(...params) {
+  constructor(apiName, ...params) {
     super(...params)
-    this.name = "GetocodingJsonError"
+    this.name = apiName
   }
 }

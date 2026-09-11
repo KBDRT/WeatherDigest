@@ -1,4 +1,7 @@
 import config from '../config/starting-parameters.js';
+import { GetocodingJsonError } from '../errors/GeocodingJsonError.js';
+import { WeatherNotFoundError } from '../errors/WeatherNotFoundError.js';
+import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getWeatherAsync(latitude, longitude, days) {
   let weatherInfo = []
@@ -14,9 +17,13 @@ export async function getWeatherAsync(latitude, longitude, days) {
     if (response.ok) {
       weatherInfo = await parseResult(response);
     }
+    else {
+      throw new HttpError(response.status, response.statusText);
+    }
   }
   catch (error) {
-    console.log("ПОКА ERROR CODING " + error);
+    const errorMessage = handleErrors("Ошибка API-WEATHER!", error);
+    console.log(`${errorMessage}`);
   }
 
   return weatherInfo;
@@ -36,17 +43,32 @@ function getWeatherURL(latitude, longitude, days) {
 async function parseResult(response) {
   let result = [];
   const data = await response.json();
+
+  if (!data.daily.time.length) {
+    throw new GetocodingJsonError("WeatherAPIJsonError");
+  }
+
   let index = 0;
+
+  if (!data.daily.time.length) {
+    throw new WeatherNotFoundError();
+  }
+
   for (let day of data.daily.time)
   {
-    result.push(
-    {
-      date: day,
-      max: data.daily["temperature_2m_max"][index],
-      min: data.daily["temperature_2m_min"][index],
-      sum: data.daily["precipitation_sum"][index]
-    });
-    index++;
+    if (data.daily["temperature_2m_max"] && data.daily["temperature_2m_min"] && data.daily["precipitation_sum"]) {
+      result.push(
+      {
+        date: day,
+        max: data.daily["temperature_2m_max"][index],
+        min: data.daily["temperature_2m_min"][index],
+        sum: data.daily["precipitation_sum"][index]
+      });
+      index++;
+    }
+    else {
+      throw new GetocodingJsonError("WeatherAPIJsonError");
+    }
   }
   return result;
 }

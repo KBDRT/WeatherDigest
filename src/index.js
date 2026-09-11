@@ -1,6 +1,4 @@
-import { Execute } from "./services/weather-service";
+import { execute } from "./services/weather-service.js";
 
-console.log("START");
-
-await Execute();
+await execute();
 

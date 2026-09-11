@@ -4,7 +4,10 @@ import { NotFoundError } from '../errors/NotFoundError.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getWeatherAsync(latitude, longitude, days) {
-  let weatherInfo = []
+  let weatherInfo = {
+    success: false,
+    weather: []
+  }
   const url = getWeatherURL(latitude, longitude, days);
 
   try {
@@ -15,7 +18,8 @@ export async function getWeatherAsync(latitude, longitude, days) {
     });
 
     if (response.ok) {
-      weatherInfo = await parseResult(response);
+      weatherInfo.weather = await parseResult(response);
+      weatherInfo.success = true;
     }
     else {
       throw new HttpError(response.status, response.statusText);

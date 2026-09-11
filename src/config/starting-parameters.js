@@ -14,6 +14,9 @@ const config = {
     defaultValue: parseInt(process.env.PARAMETER_DAYS_DEFAULT_VALUE),
     minValue: parseInt(process.env.PARAMETER_DAYS_MIN_VALUE),
     maxValue: parseInt(process.env.PARAMETER_DAYS_MAX_VALUE)
+  },
+  noCache: {
+    parameterName: process.env.PARAMETER_NOCACHE_NAME
   }
 };
 

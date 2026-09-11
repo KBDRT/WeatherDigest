@@ -10,7 +10,7 @@ export async function getGeocodingAsync(city) {
     country: "",
     latitude: 0,
     longitude: 0,
-    found: false
+    success: false
   }
 
   const url = getGeocodingURL(city);
@@ -61,7 +61,7 @@ async function parseResult(response) {
       country: city.country,
       latitude: city.latitude,
       longitude: city.longitude,
-      found: true
+      success: true
     };
   }
   else {

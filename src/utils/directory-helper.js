@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import config from '../config/starting-parameters.js';
 import { getCurrentDate } from './date-helper.js';
 
-export async function getFolder(city, days, isCreateFolder) {
+export async function getFilePath(city, days, isCreateFolder) {
 
   const currentPath = path.dirname(fileURLToPath(import.meta.url));
   const basePath = path.join(currentPath, '..', "..");

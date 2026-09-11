@@ -4,9 +4,9 @@ import { saveReport } from '../storage/reports-saver.js';
 import { getInfoFromReport } from '../storage/reports-reader.js';
 import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
 import { getWeatherAsync } from '../api/open-meteo-weather.js';
+import { Printer } from './../format/Printer.js';
 
 export class WeatherCityWorker {
-
   constructor(city, days, useCache) {
     this.cityName = city;
     this.days = days;
@@ -22,12 +22,17 @@ export class WeatherCityWorker {
     }
 
     const cityGeocoding = await getGeocodingAsync(this.cityName);
-    if (cityGeocoding.found) {
-      this.#fillCityInfo(cityGeocoding);
-      const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
-      this.#fillCityWeather(cityWeather);
+    if (cityGeocoding.success) {
+      const cityWeather = await getWeatherAsync(this.cityName, cityGeocoding.latitude, cityGeocoding.longitude, this.days);
+      if (cityWeather.success) {
+        this.#fillCityInfo(cityGeocoding);
+        this.#fillCityWeather(cityWeather.weather);
 
-      await saveReport(this.cityInfo, this.days);
+        await saveReport(this.cityInfo, this.days);
+
+        const printer = new Printer(this.cityInfo);
+        printer.display();
+      }
     }
   }
 

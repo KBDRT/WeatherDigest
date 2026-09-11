@@ -3,7 +3,7 @@ import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
-export async function getWeatherAsync(latitude, longitude, days) {
+export async function getWeatherAsync(cityName, latitude, longitude, days) {
   let weatherInfo = {
     success: false,
     weather: []
@@ -27,7 +27,7 @@ export async function getWeatherAsync(latitude, longitude, days) {
   }
   catch (error) {
     const errorMessage = handleErrors("Ошибка API-WEATHER!", error);
-    console.log(`${errorMessage}`);
+    console.log(`${city}: ${errorMessage}`);
   }
 
   return weatherInfo;

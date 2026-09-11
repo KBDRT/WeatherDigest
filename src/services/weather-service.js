@@ -1,9 +1,10 @@
-import { getGeocodingAsync, getWeatherAsync } from '../api/open-meteo-client.js';
 import { CityWeather } from '../models/CityWeather.js';
 import { parseParameters } from '../utils/parameters-parser.js';
 import { DayWeather } from '../models/DayWeather.js';
 import { saveReport } from '../storage/reports-saver.js';
 import { getInfoFromReport } from '../storage/reports-reader.js';
+import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
+import { getWeatherAsync } from '../api/open-meteo-weather.js';
 
 export async function execute() {
   const inputParameters = parseParameters();
@@ -26,7 +27,7 @@ async function getWeatherForCity(city, days) {
 
   const cityGeocoding = await getGeocodingAsync(city);
 
-  if (cityGeocoding.founded) {
+  if (cityGeocoding.found) {
     fillCityInfo(cityInfo, cityGeocoding);
     const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, days);
     fillCityWeather(cityInfo, cityWeather);

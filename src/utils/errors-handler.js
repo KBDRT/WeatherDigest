@@ -1,5 +1,4 @@
 export function handleErrors(preview, error) {
-
   const errorName = error.name;
   switch (errorName) {
     case "TimeoutError": 
@@ -8,12 +7,11 @@ export function handleErrors(preview, error) {
       return preview + " API вернул следующий ответ Статус: ${error.status}. Текст: ${error.statusText}.";
     case "TypeError":
       return preview + " Проблемы с сетью.";
-    case "WeatherAPIJsonError":
-    case "GetocodingJsonError":
+    case "JsonError":
       return preview + " Неверный JSON файл в ответе.";
-    case "CityNoFoundError":
+    case "CityNotFound":
       return `Город не найден!`;
-    case "WeatherNotFoundError":
+    case "WeatherNotFound":
       return `Погода не найдена!`;
     default:
       return preview + "Неизвестная ошибка.";

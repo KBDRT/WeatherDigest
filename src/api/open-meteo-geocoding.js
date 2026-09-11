@@ -1,7 +1,7 @@
 import config from '../config/starting-parameters.js';
-import { CityNoFoundError } from '../errors/CityNoFoundError.js';
-import { GetocodingJsonError } from '../errors/GeocodingJsonError.js';
 import { HttpError } from '../errors/httpError.js';
+import { JsonError } from '../errors/JsonError.js';
+import { NotFoundError } from '../errors/NotFoundError.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getGeocodingAsync(city) {
@@ -50,10 +50,11 @@ function getGeocodingURL(city) {
 
 async function parseResult(response) {
   const data = await response.json();
-  if (data.results.length < 0) {
-    throw new CityNoFoundError();
-  }
   
+  if (!data.results || !data.results.length) {
+    throw new NotFoundError("CityNotFound");
+  }
+
   const city = data.results[0];
   if (city.country && city.latitude && city.longitude) {
     return {
@@ -64,7 +65,7 @@ async function parseResult(response) {
     };
   }
   else {
-    throw new GetocodingJsonError();
+    throw new JsonError();
   }
 }
 

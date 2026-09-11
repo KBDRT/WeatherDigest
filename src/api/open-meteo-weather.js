@@ -1,6 +1,6 @@
 import config from '../config/starting-parameters.js';
-import { GetocodingJsonError } from '../errors/GeocodingJsonError.js';
-import { WeatherNotFoundError } from '../errors/WeatherNotFoundError.js';
+import { JsonError } from '../errors/JsonError.js';
+import { NotFoundError } from '../errors/NotFoundError.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getWeatherAsync(latitude, longitude, days) {
@@ -44,16 +44,15 @@ async function parseResult(response) {
   let result = [];
   const data = await response.json();
 
-  if (!data.daily.time.length) {
-    throw new GetocodingJsonError("WeatherAPIJsonError");
+  if (!data?.daily?.time) {
+    throw new JsonError();
+  }
+
+  if (data.daily.time.length === 0) {
+    throw new NotFoundError("WeatherNotFound");
   }
 
   let index = 0;
-
-  if (!data.daily.time.length) {
-    throw new WeatherNotFoundError();
-  }
-
   for (let day of data.daily.time)
   {
     if (data.daily["temperature_2m_max"] && data.daily["temperature_2m_min"] && data.daily["precipitation_sum"]) {
@@ -67,7 +66,7 @@ async function parseResult(response) {
       index++;
     }
     else {
-      throw new GetocodingJsonError("WeatherAPIJsonError");
+      throw new JsonError();
     }
   }
   return result;

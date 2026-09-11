@@ -1,5 +1,7 @@
 import { getGeocodingAsync, getWeatherAsync } from '../api/open-meteo-client.js';
+import { CityWeather } from '../models/CityWeather.js';
 import { parseParameters } from '../utils/parameters-parser.js';
+import { DayWeather } from '../models/DayWeather.js';
 import { saveReport } from '../storage/reports-saver.js';
 
 export async function execute() {
@@ -14,22 +16,36 @@ export async function execute() {
 }
 
 async function getWeatherForCity(city, days) {
-  let info = {
-    city: {},
-    weather: {}
-  }
+  const cityInfo = new CityWeather();
+  cityInfo.city = city;;
   const cityGeocoding = await getGeocodingAsync(city);
 
   if (cityGeocoding.founded) {
-    info.city = cityGeocoding;
+    fillCityInfo(cityInfo, cityGeocoding);
     const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, days);
-    info.weather = cityWeather;
+    fillCityWeather(cityInfo, cityWeather);
+    console.log(JSON.stringify(cityInfo, null, 2));
   }
   else {
     // console.log(`Город ${city} не найден!`);
   }
 
-  console.log(info);
-  await saveReport(info, days);
-  return info;
+}
+
+function fillCityInfo(city, geocodingInfo) {
+  city.country = geocodingInfo.country;
+  city.latitude = geocodingInfo.latitude;
+  city.longitude = geocodingInfo.longitude;
+}
+
+function fillCityWeather(city, weather) {
+  for (let day of weather) {
+    city.weather.push(
+      new DayWeather(
+        day.date, 
+        day.max, 
+        day.min, 
+        day.sum
+      ));
+  }
 }

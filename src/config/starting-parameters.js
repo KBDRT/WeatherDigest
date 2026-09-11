@@ -17,7 +17,7 @@ const config = {
   },
   noCache: {
     parameterName: process.env.PARAMETER_NOCACHE_NAME
-  }
+  },
   api : {
     baseUrlGeocoding: process.env.BASE_URL_GEOCODING,
     baseUrlWeather: process.env.BASE_URL_WEATHER,

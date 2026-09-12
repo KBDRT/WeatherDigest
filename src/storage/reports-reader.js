@@ -17,7 +17,7 @@ export async function getInfoFromReport(city, days) {
     }
   }
   catch (error) {
-    throw new StorageError("REPORTS-READER", "Ошибка при чтении отчета.");
+    
   }
 
   return result;

@@ -19,6 +19,8 @@ export function handleErrors(preview, error) {
       return `Город не найден!`;
     case "WeatherNotFound":
       return `Погода не найдена!`;
+    case "StorageError":
+      return ` ${error.message}`;
     default:
       return preview + " Неизвестная ошибка.";
   }

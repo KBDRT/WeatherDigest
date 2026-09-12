@@ -4,6 +4,7 @@ import { saveReport } from '../storage/reports-saver.js';
 import { getInfoFromReport } from '../storage/reports-reader.js';
 import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
 import { getWeatherAsync } from '../api/open-meteo-weather.js';
+import { Printer } from './../format/Printer.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
 export class WeatherCityWorker {
@@ -19,22 +20,46 @@ export class WeatherCityWorker {
 
   async start() {
     try {
-      if (this.useCache && await getInfoFromReport(this.cityName, this.days)) {
-        return;
+      if (this.useCache)  {
+        await this.#getFromCache();
+      } 
+      else {
+        await this.#getFromAPI();
       }
 
-      const cityGeocoding = await getGeocodingAsync(this.cityName);
-      if (cityGeocoding.success) {
-        this.#fillCityInfo(cityGeocoding);
-        const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
-        this.#fillCityWeather(cityWeather);
-
-        await saveReport(this.cityInfo, this.days);
+      if (this.#success) {
+        const printer = new Printer(this.cityInfo);
+        printer.display();
       }
     }
     catch (error) {
-      const errorMessage = handleErrors("Ошибка API!", error);
+      const errorMessage = handleErrors(error);
       console.log(`${this.cityName}: ${errorMessage}`);
+    }
+  }
+
+  async #getFromCache() {
+    const cacheResult = await getInfoFromReport(this.cityName, this.days);
+    if (cacheResult.success) {
+      this.#fillCityInfo(cacheResult.data);
+      this.#fillCityWeather(cacheResult.data.weather);
+      this.#success = true;
+    } 
+    else {
+      await this.#getFromAPI();
+    }
+  }
+
+  async #getFromAPI() {
+    const cityGeocoding = await getGeocodingAsync(this.cityName);
+    if (cityGeocoding.success) {
+      const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
+      if (cityWeather.success) {
+        this.#fillCityInfo(cityGeocoding);
+        this.#fillCityWeather(cityWeather.weather);
+        await saveReport(this.cityInfo, this.days);
+        this.#success = true;
+      }
     }
   }
 

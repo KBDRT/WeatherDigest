@@ -1,8 +1,7 @@
 import config from '../config/config-parameters.js';
-import { HttpError } from '../errors/httpError.js';
+import { HttpError } from '../errors/HttpError.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
-import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getGeocodingAsync(city) {
   let cityInfo = {
@@ -10,7 +9,7 @@ export async function getGeocodingAsync(city) {
     country: "",
     latitude: 0,
     longitude: 0,
-    success: false,
+    success: false
   }
 
   const url = getGeocodingURL(city);
@@ -26,9 +25,11 @@ export async function getGeocodingAsync(city) {
     cityInfo = { ...cityInfo, ...parsedData };
   }
   else {
-    throw new HttpError(response.status, response.statusText);
+    const data = await response.json();
+    const reason = data.reason ?? "Неизвестная причина";
+    throw new HttpError(response.status, response.statusText, reason);
   }
-
+  
   return cityInfo;
 }
 

@@ -1,12 +1,12 @@
 import config from '../config/config-parameters.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
-import { handleErrors } from '../utils/errors-handler.js';
+import { HttpError } from './../errors/HttpError.js';
 
-export async function getWeatherAsync(cityName, latitude, longitude, days) {
+export async function getWeatherAsync(latitude, longitude, days) {
   let weatherInfo = {
     success: false,
-    weather: [],
+    weather: []
   }
   const url = getWeatherURL(latitude, longitude, days);
 
@@ -21,9 +21,11 @@ export async function getWeatherAsync(cityName, latitude, longitude, days) {
     weatherInfo.success = true;
   }
   else {
-    throw new HttpError(response.status, response.statusText);
+    const data = await response.json();
+    const reason = data.reason ?? "Неизвестная причина";
+    throw new HttpError(response.status, response.statusText, reason);
   }
-  
+
   return weatherInfo;
 }
 

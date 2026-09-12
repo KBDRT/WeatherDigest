@@ -2,7 +2,6 @@ import config from '../config/config-parameters.js';
 import { HttpError } from '../errors/httpError.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
-import { handleErrors } from '../utils/errors-handler.js';
 
 export async function getGeocodingAsync(city) {
   let cityInfo = {

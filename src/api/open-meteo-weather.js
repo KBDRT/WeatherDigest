@@ -1,7 +1,7 @@
 import config from '../config/config-parameters.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
-import { handleErrors } from '../utils/errors-handler.js';
+import { HttpError } from './../errors/HttpError.js';
 
 export async function getWeatherAsync(cityName, latitude, longitude, days) {
   let weatherInfo = {

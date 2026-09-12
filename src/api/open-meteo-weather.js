@@ -63,9 +63,9 @@ async function parseResult(response) {
       result.push(
       {
         date: day,
-        max: data.daily["temperature_2m_max"][index],
-        min: data.daily["temperature_2m_min"][index],
-        sum: data.daily["precipitation_sum"][index]
+        maxTemperature: data.daily["temperature_2m_max"][index],
+        minTemperature: data.daily["temperature_2m_min"][index],
+        sumPrecipitation: data.daily["precipitation_sum"][index]
       });
       index++;
     }

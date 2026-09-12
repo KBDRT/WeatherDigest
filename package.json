@@ -4,7 +4,8 @@
   "description": "Утилита «Погодный дайджест» для получения прогноза погоды по городам",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "withEnv": "node src/index.js"
   },
   "repository": {
     "type": "git",

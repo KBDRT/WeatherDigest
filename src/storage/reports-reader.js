@@ -1,3 +1,4 @@
+import { StorageError } from "../errors/StorageError.js";
 import { getFilePath } from "../utils/directory-helper.js";
 import fs from 'fs/promises';
 
@@ -16,7 +17,7 @@ export async function getInfoFromReport(city, days) {
     }
   }
   catch (error) {
-
+    throw new StorageError("REPORTS-READER", "Ошибка при чтении отчета.");
   }
 
   return result;

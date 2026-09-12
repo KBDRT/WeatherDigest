@@ -5,6 +5,7 @@ import { getInfoFromReport } from '../storage/reports-reader.js';
 import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
 import { getWeatherAsync } from '../api/open-meteo-weather.js';
 import { Printer } from './../format/Printer.js';
+import { handleErrors } from '../utils/errors-handler.js';
 
 export class WeatherCityWorker {
   #success = false;
@@ -18,16 +19,22 @@ export class WeatherCityWorker {
   }
 
   async start() {
-    if (this.useCache)  {
-      await this.#getFromCache();
-    } 
-    else {
-      await this.#getFromAPI();
-    }
+    try {
+      if (this.useCache)  {
+        await this.#getFromCache();
+      } 
+      else {
+        await this.#getFromAPI();
+      }
 
-    if (this.#success) {
-      const printer = new Printer(this.cityInfo);
-      printer.display();
+      if (this.#success) {
+        const printer = new Printer(this.cityInfo);
+        printer.display();
+      }
+    }
+    catch (error) {
+      const errorMessage = handleErrors(error);
+      console.log(`${this.cityName}: ${errorMessage}`);
     }
   }
 
@@ -46,7 +53,7 @@ export class WeatherCityWorker {
   async #getFromAPI() {
     const cityGeocoding = await getGeocodingAsync(this.cityName);
     if (cityGeocoding.success) {
-      const cityWeather = await getWeatherAsync(this.cityName, cityGeocoding.latitude, cityGeocoding.longitude, this.days);
+      const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
       if (cityWeather.success) {
         this.#fillCityInfo(cityGeocoding);
         this.#fillCityWeather(cityWeather.weather);

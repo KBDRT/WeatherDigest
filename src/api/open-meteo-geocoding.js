@@ -1,5 +1,5 @@
 import config from '../config/config-parameters.js';
-import { HttpError } from '../errors/httpError.js';
+import { HttpError } from '../errors/HttpError.js';
 import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
 
@@ -14,26 +14,22 @@ export async function getGeocodingAsync(city) {
 
   const url = getGeocodingURL(city);
 
-  try {
-    const response = await fetch(url, { 
-      signal: AbortSignal.timeout(config.api.timeOut),
-      method: "GET", 
-      headers: { "Accept": "application/json" }
-    });
+  const response = await fetch(url, { 
+    signal: AbortSignal.timeout(config.api.timeOut),
+    method: "GET", 
+    headers: { "Accept": "application/json" }
+  });
 
-    if (response.ok) {
-      const parsedData = await parseResult(response);
-      cityInfo = { ...cityInfo, ...parsedData };
-    }
-    else {
-      throw new HttpError(response.status, response.statusText);
-    }
+  if (response.ok) {
+    const parsedData = await parseResult(response);
+    cityInfo = { ...cityInfo, ...parsedData };
   }
-  catch (error) {
-    const errorMessage = handleErrors("Ошибка API-GEOCODING!", error);
-    console.log(`${city}: ${errorMessage}`);
+  else {
+    const data = await response.json();
+    const reason = data.reason ?? "Неизвестная причина";
+    throw new HttpError(response.status, response.statusText, reason);
   }
-
+  
   return cityInfo;
 }
 

@@ -47,8 +47,8 @@ function createReport(data) {
     const dayWeather = data.weather[index];
     tableBody += `<tr>
     <td class="tdCenter">${getDate(dayWeather.date)}</td>
-    <td class="tdRight">${dayWeather.maxTemperature} °C</td>
     <td class="tdRight">${dayWeather.minTemperature} °C</td>
+    <td class="tdRight">${dayWeather.maxTemperature} °C</td>
     <td class="tdRight">${dayWeather.sumPrecipitation} мм</td>
     </tr>`;
   }

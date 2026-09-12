@@ -4,9 +4,10 @@ import { saveReport } from '../storage/reports-saver.js';
 import { getInfoFromReport } from '../storage/reports-reader.js';
 import { getGeocodingAsync } from '../api/open-meteo-geocoding.js';
 import { getWeatherAsync } from '../api/open-meteo-weather.js';
+import { handleErrors } from '../utils/errors-handler.js';
 
 export class WeatherCityWorker {
-
+  #success = false;
   constructor(city, days, useCache) {
     this.cityName = city;
     this.days = days;
@@ -17,17 +18,23 @@ export class WeatherCityWorker {
   }
 
   async start() {
-    if (this.useCache && await getInfoFromReport(this.cityName, this.days)) {
-      return;
+    try {
+      if (this.useCache && await getInfoFromReport(this.cityName, this.days)) {
+        return;
+      }
+
+      const cityGeocoding = await getGeocodingAsync(this.cityName);
+      if (cityGeocoding.success) {
+        this.#fillCityInfo(cityGeocoding);
+        const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
+        this.#fillCityWeather(cityWeather);
+
+        await saveReport(this.cityInfo, this.days);
+      }
     }
-
-    const cityGeocoding = await getGeocodingAsync(this.cityName);
-    if (cityGeocoding.found) {
-      this.#fillCityInfo(cityGeocoding);
-      const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
-      this.#fillCityWeather(cityWeather);
-
-      await saveReport(this.cityInfo, this.days);
+    catch (error) {
+      const errorMessage = handleErrors("Ошибка API!", error);
+      console.log(`${this.cityName}: ${errorMessage}`);
     }
   }
 
@@ -42,9 +49,9 @@ export class WeatherCityWorker {
       this.cityInfo.weather.push(
         new DayWeather(
           day.date, 
-          day.max, 
-          day.min, 
-          day.sum
+          day.maxTemperature, 
+          day.minTemperature, 
+          day.sumPrecipitation
         ));
     }
   }

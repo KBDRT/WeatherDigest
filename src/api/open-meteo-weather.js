@@ -3,33 +3,27 @@ import { JsonError } from '../errors/JsonError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
-export async function getWeatherAsync(latitude, longitude, days) {
+export async function getWeatherAsync(cityName, latitude, longitude, days) {
   let weatherInfo = {
     success: false,
-    weather: []
+    weather: [],
   }
   const url = getWeatherURL(latitude, longitude, days);
 
-  try {
-    const response = await fetch(url, { 
-      signal: AbortSignal.timeout(config.api.timeOut),
-      method: "GET", 
-      headers: { "Accept": "application/json" }
-    });
+  const response = await fetch(url, { 
+    signal: AbortSignal.timeout(config.api.timeOut),
+    method: "GET", 
+    headers: { "Accept": "application/json" }
+  });
 
-    if (response.ok) {
-      weatherInfo.weather = await parseResult(response);
-      weatherInfo.success = true;
-    }
-    else {
-      throw new HttpError(response.status, response.statusText);
-    }
+  if (response.ok) {
+    weatherInfo.weather = await parseResult(response);
+    weatherInfo.success = true;
   }
-  catch (error) {
-    const errorMessage = handleErrors("Ошибка API-WEATHER!", error);
-    console.log(`${errorMessage}`);
+  else {
+    throw new HttpError(response.status, response.statusText);
   }
-
+  
   return weatherInfo;
 }
 
@@ -63,9 +57,9 @@ async function parseResult(response) {
       result.push(
       {
         date: day,
-        max: data.daily["temperature_2m_max"][index],
-        min: data.daily["temperature_2m_min"][index],
-        sum: data.daily["precipitation_sum"][index]
+        maxTemperature: data.daily["temperature_2m_max"][index],
+        minTemperature: data.daily["temperature_2m_min"][index],
+        sumPrecipitation: data.daily["precipitation_sum"][index]
       });
       index++;
     }

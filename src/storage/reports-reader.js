@@ -1,15 +1,19 @@
-import { getFolder } from "../utils/directory-helper.js";
+import { getFilePath } from "../utils/directory-helper.js";
 import fs from 'fs/promises';
 
 export async function getInfoFromReport(city, days) {
-  let result = false;
+  let result = {
+    success: false,
+    data: {}
+  };
   try {
-    const path = await getFolder(city, days);
-    const fileContent = await fs.readFile(path, 'utf-8');
-
-    const data = JSON.parse(fileContent)
-    console.log(data);
-    result = true;
+    const filePath = await getFilePath(city, days);
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    if (fileContent.length > 0) {
+      const parsedData = JSON.parse(fileContent)
+      result.data = parsedData;
+      result.success = true;
+    }
   }
   catch (error) {
 

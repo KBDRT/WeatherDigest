@@ -7,7 +7,7 @@ import { getWeatherAsync } from '../api/open-meteo-weather.js';
 import { handleErrors } from '../utils/errors-handler.js';
 
 export class WeatherCityWorker {
-
+  #success = false;
   constructor(city, days, useCache) {
     this.cityName = city;
     this.days = days;
@@ -49,9 +49,9 @@ export class WeatherCityWorker {
       this.cityInfo.weather.push(
         new DayWeather(
           day.date, 
-          day.max, 
-          day.min, 
-          day.sum
+          day.maxTemperature, 
+          day.minTemperature, 
+          day.sumPrecipitation
         ));
     }
   }

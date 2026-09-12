@@ -10,29 +10,23 @@ export async function getGeocodingAsync(city) {
     country: "",
     latitude: 0,
     longitude: 0,
-    success: false
+    success: false,
   }
 
   const url = getGeocodingURL(city);
 
-  try {
-    const response = await fetch(url, { 
-      signal: AbortSignal.timeout(config.api.timeOut),
-      method: "GET", 
-      headers: { "Accept": "application/json" }
-    });
+  const response = await fetch(url, { 
+    signal: AbortSignal.timeout(config.api.timeOut),
+    method: "GET", 
+    headers: { "Accept": "application/json" }
+  });
 
-    if (response.ok) {
-      const parsedData = await parseResult(response);
-      cityInfo = { ...cityInfo, ...parsedData };
-    }
-    else {
-      throw new HttpError(response.status, response.statusText);
-    }
+  if (response.ok) {
+    const parsedData = await parseResult(response);
+    cityInfo = { ...cityInfo, ...parsedData };
   }
-  catch (error) {
-    const errorMessage = handleErrors("Ошибка API-GEOCODING!", error);
-    console.log(`${city}: ${errorMessage}`);
+  else {
+    throw new HttpError(response.status, response.statusText);
   }
 
   return cityInfo;

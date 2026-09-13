@@ -3,3 +3,6 @@ docs/
 .prettierrc
 reports-reader/index.html
 reports-reader/styles.css
+
+package.json
+package-lock.json

@@ -6,48 +6,47 @@ import { NotFoundError } from '../errors/NotFoundError.js';
 export async function getGeocodingAsync(city) {
   let cityInfo = {
     name: city,
-    country: "",
+    country: '',
     latitude: 0,
     longitude: 0,
-    success: false
-  }
+    success: false,
+  };
 
   const url = getGeocodingURL(city);
 
-  const response = await fetch(url, { 
+  const response = await fetch(url, {
     signal: AbortSignal.timeout(config.api.timeOut),
-    method: "GET", 
-    headers: { "Accept": "application/json" }
+    method: 'GET',
+    headers: { Accept: 'application/json' },
   });
 
   if (response.ok) {
     const parsedData = await parseResult(response);
     cityInfo = { ...cityInfo, ...parsedData };
-  }
-  else {
+  } else {
     const data = await response.json();
-    const reason = data.reason ?? "Неизвестная причина";
+    const reason = data.reason ?? 'Неизвестная причина';
     throw new HttpError(response.status, response.statusText, reason);
   }
-  
+
   return cityInfo;
 }
 
 function getGeocodingURL(city) {
   const url = new URL(config.api.baseUrlGeocoding);
-  url.searchParams.append("name", city);
-  url.searchParams.append("count", 1);
-  url.searchParams.append("language", "ru");
-  url.searchParams.append("format", "json");
+  url.searchParams.append('name', city);
+  url.searchParams.append('count', 1);
+  url.searchParams.append('language', 'ru');
+  url.searchParams.append('format', 'json');
 
   return url;
 }
 
 export async function parseResult(response) {
   const data = await response.json();
-  
+
   if (!data.results || !data.results.length) {
-    throw new NotFoundError("CityNotFound");
+    throw new NotFoundError('CityNotFound');
   }
 
   const city = data.results[0];
@@ -56,11 +55,9 @@ export async function parseResult(response) {
       country: city.country,
       latitude: city.latitude,
       longitude: city.longitude,
-      success: true
+      success: true,
     };
-  }
-  else {
+  } else {
     throw new JsonError();
   }
 }
-

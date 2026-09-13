@@ -1,10 +1,10 @@
-export class Printer{
+export class Printer {
   #header = [
-      'Дата'.padEnd(13),
-      'Мин. температура'.padStart(18),
-      'Макс. температура'.padStart(18),
-      'Сумм. осадки'.padStart(18),
-    ].join(' │ ');
+    'Дата'.padEnd(13),
+    'Мин. температура'.padStart(18),
+    'Макс. температура'.padStart(18),
+    'Сумм. осадки'.padStart(18),
+  ].join(' │ ');
 
   constructor(cityInfo) {
     this.info = cityInfo;
@@ -36,12 +36,12 @@ export class Printer{
   #printTableBody() {
     for (const day of this.info.weather) {
       const row = [
-          this.#formatDate(day.date).padEnd(13),
-          `${day.minTemperature} °C`.padStart(18),
-          `${day.maxTemperature} °C`.padStart(18),
-          `${day.sumPrecipitation} мм`.padStart(18),
+        this.#formatDate(day.date).padEnd(13),
+        `${day.minTemperature} °C`.padStart(18),
+        `${day.maxTemperature} °C`.padStart(18),
+        `${day.sumPrecipitation} мм`.padStart(18),
       ].join(' │ ');
-      
+
       console.log(row);
     }
   }

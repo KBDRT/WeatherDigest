@@ -1,0 +1,5 @@
+node_modules
+docs/
+.prettierrc
+reports-reader/index.html
+reports-reader/styles.css

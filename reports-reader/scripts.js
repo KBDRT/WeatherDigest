@@ -5,21 +5,19 @@ async function printFiles(e) {
       const text = await file.text();
       const parsedData = JSON.parse(text);
 
-      const header = document.getElementById("weather"); 
-      if (header)
-        document.body.removeChild(header);
+      const header = document.getElementById('weather');
+      if (header) document.body.removeChild(header);
 
       createReport(parsedData);
+    } catch (error) {
+      alert(`Произошла ошибка ${error.name}!`);
     }
-    catch (error) {
-      alert(`Произошла ошибка ${error.name}!`)
-    }    
   }
 }
 
 function createReport(data) {
-  const baseDiv = document.createElement("div"); 
-  baseDiv.id = "weather";
+  const baseDiv = document.createElement('div');
+  baseDiv.id = 'weather';
 
   const cityInfo = `
   <br />
@@ -63,4 +61,4 @@ function getDate(date) {
   return `${day}.${month}.${year}`;
 }
 
-document.getElementById("selectFile").addEventListener("change", printFiles);
+document.getElementById('selectFile').addEventListener('change', printFiles);

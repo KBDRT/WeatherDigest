@@ -8,7 +8,7 @@ export async function saveReport(citiesWeather, days) {
     await fs.writeFile(fullPath, serializedInfo);
   }
   catch (error) {
-    throw new StorageError("REPORTS-SAVER", "Ошибка при записи отчета.");
+
   }
 }
 

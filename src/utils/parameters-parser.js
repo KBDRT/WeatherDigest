@@ -9,24 +9,40 @@ export function parseParameters() {
     nocache: false,
   }
 
-  const args = process.argv.slice(2);
-  for (let index = 0; index < args.length; index++) {
-    const parameter = args[index];
-    
-    const parsingDaysResult = parseDays(parameter, args[index + 1]);
+  if (process.env.npm_lifecycle_event == "withEnv")
+  {
+    const parsingDaysResult = parseDays(config.days["parameterName"], process.env.DAYS);
     if (parsingDaysResult.success) {
       parameters.days = parsingDaysResult.value;
-      continue;
     }
 
-    const parsingCitiesResult = parseCities(parameter, args[index + 1]);
+    const parsingCitiesResult = parseCities(config.city["parameterName"], process.env.CITY);
     if (parsingCitiesResult.success) {
       parameters.cities = parsingCitiesResult.value;
-      continue;
     }
+      
+    parameters.nocache = parseNoCache(process.env.DAYS);
+  }
+  else {
+    const args = process.argv.slice(2);
+    for (let index = 0; index < args.length; index++) {
+      const parameter = args[index];
+      
+      const parsingDaysResult = parseDays(parameter, args[index + 1]);
+      if (parsingDaysResult.success) {
+        parameters.days = parsingDaysResult.value;
+        continue;
+      }
 
-    if (!parameters.nocache) {
-      parameters.nocache = parseNoCache(parameter);
+      const parsingCitiesResult = parseCities(parameter, args[index + 1]);
+      if (parsingCitiesResult.success) {
+        parameters.cities = parsingCitiesResult.value;
+        continue;
+      }
+
+      if (!parameters.nocache) {
+        parameters.nocache = parseNoCache(parameter);
+      }
     }
   }
 
@@ -38,6 +54,7 @@ export function parseParameters() {
 
   return parameters;
 }
+
 
 function parseDays(currentParameter, nextParameter) {
   let result = {

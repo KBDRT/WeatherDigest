@@ -298,7 +298,8 @@ npm run eslint:check
 Для запуска - открыть [index.html](/reports-reader/index.html) в браузере, выбрать сохраненный отчет.
 <br><br>
 Результат:
-<img width="856" height="370" alt="image" src="https://github.com/user-attachments/assets/46df0fa7-03c2-4f1b-a908-105c46045164" />
+<br>
+<img width="830" height="332" alt="image" src="https://github.com/user-attachments/assets/244061dd-6972-42b8-882b-8736be910b84" />
 
 ### Базовые тесты
 Созданы простые тесты для проверки функции с отправкой запроса к API и функции чтения ответа. Используется стандартная библиотека `node:test`.

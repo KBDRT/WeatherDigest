@@ -20,10 +20,9 @@ export class WeatherCityWorker {
 
   async start() {
     try {
-      if (this.useCache)  {
+      if (this.useCache) {
         await this.#getFromCache();
-      } 
-      else {
+      } else {
         await this.#getFromAPI();
       }
 
@@ -31,8 +30,7 @@ export class WeatherCityWorker {
         const printer = new Printer(this.cityInfo);
         printer.display();
       }
-    }
-    catch (error) {
+    } catch (error) {
       const errorMessage = handleErrors(error);
       console.log(`${this.cityName}: ${errorMessage}`);
     }
@@ -44,8 +42,7 @@ export class WeatherCityWorker {
       this.#fillCityInfo(cacheResult.data);
       this.#fillCityWeather(cacheResult.data.weather);
       this.#success = true;
-    } 
-    else {
+    } else {
       await this.#getFromAPI();
     }
   }
@@ -53,7 +50,11 @@ export class WeatherCityWorker {
   async #getFromAPI() {
     const cityGeocoding = await getGeocodingAsync(this.cityName);
     if (cityGeocoding.success) {
-      const cityWeather = await getWeatherAsync(cityGeocoding.latitude, cityGeocoding.longitude, this.days);
+      const cityWeather = await getWeatherAsync(
+        cityGeocoding.latitude,
+        cityGeocoding.longitude,
+        this.days
+      );
       if (cityWeather.success) {
         this.#fillCityInfo(cityGeocoding);
         this.#fillCityWeather(cityWeather.weather);
@@ -73,11 +74,12 @@ export class WeatherCityWorker {
     for (let day of weather) {
       this.cityInfo.weather.push(
         new DayWeather(
-          day.date, 
-          day.maxTemperature, 
-          day.minTemperature, 
+          day.date,
+          day.maxTemperature,
+          day.minTemperature,
           day.sumPrecipitation
-        ));
+        )
+      );
     }
   }
 }

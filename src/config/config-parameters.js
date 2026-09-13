@@ -7,23 +7,23 @@ validateEnvFile();
 
 const config = {
   city: {
-    parameterName: process.env.PARAMETER_CITY_NAME
+    parameterName: process.env.PARAMETER_CITY_NAME,
   },
   days: {
     parameterName: process.env.PARAMETER_DAYS_NAME,
     defaultValue: parseInt(process.env.PARAMETER_DAYS_DEFAULT_VALUE),
     minValue: parseInt(process.env.PARAMETER_DAYS_MIN_VALUE),
-    maxValue: parseInt(process.env.PARAMETER_DAYS_MAX_VALUE)
+    maxValue: parseInt(process.env.PARAMETER_DAYS_MAX_VALUE),
   },
   noCache: {
-    parameterName: process.env.PARAMETER_NOCACHE_NAME
+    parameterName: process.env.PARAMETER_NOCACHE_NAME,
   },
-  api : {
+  api: {
     baseUrlGeocoding: process.env.BASE_URL_GEOCODING,
     baseUrlWeather: process.env.BASE_URL_WEATHER,
-    timeOut: Number(process.env.API_TIMEOUT)
+    timeOut: Number(process.env.API_TIMEOUT),
   },
-  reportsFolder: process.env.REPORTS_FOLDER
+  reportsFolder: process.env.REPORTS_FOLDER,
 };
 
 export default config;

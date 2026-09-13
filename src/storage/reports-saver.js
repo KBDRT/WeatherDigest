@@ -6,9 +6,5 @@ export async function saveReport(citiesWeather, days) {
   try {
     const fullPath = await getFilePath(citiesWeather.city, days, true);
     await fs.writeFile(fullPath, serializedInfo);
-  }
-  catch (error) {
-
-  }
+  } catch (error) {}
 }
-

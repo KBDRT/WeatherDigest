@@ -21,7 +21,10 @@ export function handleErrors(error) {
         ` API вернул следующий ответ Статус: ${error.status}. Текст: ${error.statusText}.`
       );
     case 'TypeError':
-      return source + ' Проблемы с сетью.';
+      if (error.message === 'fetch failed'){
+        return source + ' Проблемы с сетью.';
+      }
+      return 'Ошибка с типом';
     case 'JsonError':
       return source + ' Неверный JSON файл в ответе.';
     case 'CityNotFound':

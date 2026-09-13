@@ -1,4 +1,3 @@
-import { StorageError } from '../errors/StorageError.js';
 import { getFilePath } from '../utils/directory-helper.js';
 import fs from 'fs/promises';
 

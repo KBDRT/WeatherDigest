@@ -40,7 +40,7 @@ function getWeatherURL(latitude, longitude, days) {
   return url;
 }
 
-async function parseResult(response) {
+export async function parseResult(response) {
   let result = [];
   const data = await response.json();
 

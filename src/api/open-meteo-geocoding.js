@@ -43,7 +43,7 @@ function getGeocodingURL(city) {
   return url;
 }
 
-async function parseResult(response) {
+export async function parseResult(response) {
   const data = await response.json();
   
   if (!data.results || !data.results.length) {

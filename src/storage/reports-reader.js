@@ -14,7 +14,9 @@ export async function getInfoFromReport(city, days) {
       result.data = parsedData;
       result.success = true;
     }
-  } catch (error) {}
+  } catch {
+    result = false;
+  }
 
   return result;
 }

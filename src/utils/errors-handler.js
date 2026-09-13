@@ -21,7 +21,7 @@ export function handleErrors(error) {
         ` API вернул следующий ответ Статус: ${error.status}. Текст: ${error.statusText}.`
       );
     case 'TypeError':
-      if (error.message === 'fetch failed'){
+      if (error.message === 'fetch failed') {
         return source + ' Проблемы с сетью.';
       }
       return 'Ошибка с типом';

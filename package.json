@@ -3,9 +3,20 @@
   "version": "1.0.0",
   "description": "Утилита «Погодный дайджест» для получения прогноза погоды по городам",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "withEnv": "node src/index.js"
+    "withEnv": "node src/index.js",
+
+    "prettier:check": "prettier --check .",
+    "eslint:check": "eslint .",
+
+    "test:geocoding": "node --test tests/geocoding-api.tests.js",
+    "test:weather": "node --test tests/weather-api.tests.js",
+
+    "example:success": "node src/index.js --city Москва --days 5 --nocache",
+    "example:not-found": "node src/index.js --city НетТакогоГорода --days 5",
+    "example:bad-params": "node src/index.js --days 5"
   },
   "repository": {
     "type": "git",
@@ -14,7 +25,6 @@
   "packages": {},
   "author": "Artemiy",
   "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/KBDRT/WeatherDigest/issues"
   },
@@ -28,5 +38,8 @@
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.12.0",
     "prettier": "^3.9.6"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
